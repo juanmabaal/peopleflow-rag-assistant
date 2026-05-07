@@ -1,7 +1,47 @@
 [project]
 name = "documentation-helper-ai"
 version = "0.1.0"
-description = "Add your description here"
+description = "Documentation helper AI project using LangChain, Tavily, ChromaDB and FastAPI"
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = []
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "aiofiles==24.1.0",
+    "aiohttp==3.12.13",
+    "beautifulsoup4==4.13.4",
+    "certifi==2025.6.15",
+    "chromadb==1.0.15",
+    "fastapi==0.116.0",
+    "firecrawl-py==2.15.0",
+    "jinja2==3.1.6",
+    "langchain==0.3.26",
+    "langchain-chroma==0.2.4",
+    "langchain-community==0.3.27",
+    "langchain-core==0.3.68",
+    "langchain-openai==0.3.27",
+    "langchain-pinecone==0.2.8",
+    "langchain-tavily==0.2.7",
+    "langchain-text-splitters==0.3.8",
+    "langchainhub==0.1.21",
+    "langsmith==0.4.4",
+    "lxml==6.0.0",
+    "pandas",
+    "python-dotenv",
+    "requests",
+    "rich",
+    "uvicorn"
+]
+
+[dependency-groups]
+dev = [
+    "black==25.1.0",
+    "isort==6.0.1",
+    "pytest",
+    "ipykernel",
+    "jupyter"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[tool.uv]
+package = false
