@@ -28,7 +28,7 @@ dependencies = [
     "python-dotenv",
     "requests",
     "rich",
-    "uvicorn"
+    "uvicorn",
 ]
 
 [dependency-groups]
