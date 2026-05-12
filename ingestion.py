@@ -26,7 +26,7 @@ embeddings = OpenAIEmbeddings(
     model="text-embedding-3-small", show_progress_bar=False, chunk_size=50, retry_max_seconds=10
 )
 
-#chorama = Chorama(persist_directory = "chorama_db", embedding_function = embeddings)
+# vectorStore = Chroma(persist_directory = "chorama_db", embedding_function = embeddings)
 vectorStore = PineconeVectorStore(index_name="langchain-docs-2026", embedding= embeddings)
 tavility_extract = TavilyExtract()
 tavility_map = TavilyMap(max_depth=5, max_breadth=20, max_pages = 1000)
@@ -149,7 +149,7 @@ async def main():
     #     """ TavilyCrawl: Starting to map documentation structure from https://python.langchain.com/""",
     #         Colors.PURPLE
     # )
-    # site_map = tavility_map.invoke("https://python.langchain.com/")
+    site_map = tavility_map.invoke("https://python.langchain.com/")
 
 
     # log_success(
@@ -199,6 +199,7 @@ async def main():
     log_header("PIPELINE COMPLETE")
     log_success("🎉 Documentation ingestion pipeline finished successfully!")
     log_info("📊 Summary:", Colors.BOLD)
+    log_info(f"   • URL's mapped: {len(site_map['results'])}")
     log_info(f"   • Documents extracted: {len(all_docs)}")
     log_info(f"   • Chunks created: {len(splitted_docs)}")
 
