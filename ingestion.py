@@ -78,7 +78,7 @@ async def async_extract(url_batches: List[List[str]]):
             for extracted_page in result["results"]: #type: ignore
                 document = Document(
                     page_content=extracted_page["raw_content"],
-                    metdata={"source": extracted_page["url"]},
+                    metadata={"source": extracted_page["url"]},
                 )
                 all_pages.append(document)
     log_success(
