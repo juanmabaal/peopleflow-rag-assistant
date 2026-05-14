@@ -32,7 +32,7 @@ def retrieve_context(query: str):
     retrieved_docs = vectorstore.as_retriever().invoke(query, k=4)
 
     # Serialize documents for the model
-    serialized = "n\n".join(
+    serialized = "\n\n".join(
         f"Source: {doc.metadata.get('source', 'Unknown')}\n\nContent: {doc.page_content}"
         for doc in retrieved_docs
     )
