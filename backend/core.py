@@ -27,7 +27,7 @@ model = init_chat_model("gpt-5.2", model_provider="openai")
 
 @tool(response_format="content_and_artifact")
 def retrieve_context(query: str):
-    """Retrieve relevant documentation to hel answer user queries abaout Langchain."""
+    """Retrieve relevant documentation to help answer user queries abaout Langchain."""
     #Retrieve top 4 most similar documents
     retrieved_docs = vectorstore.as_retriever().invoke(query, k=4)
 
