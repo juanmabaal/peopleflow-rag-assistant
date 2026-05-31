@@ -1,7 +1,7 @@
 [project]
-name = "PeopleFlow RAG Assistant"
+name = "peopleflow-rag-assistant"
 version = "0.1.0"
-description = "Documentation helper AI project using LangChain, Tavily, ChromaDB and FastAPI"
+description = "Hybrid RAG assistant for HR SaaS support using PeopleFlow documentation, Pinecone, LangChain, Tavily and Streamlit"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
