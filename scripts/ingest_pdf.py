@@ -5,7 +5,7 @@ from backend.config.settings import PDF_PATH
 from backend.ingestion.pdf_loader import load_pdf_document
 from backend.ingestion.text_splitter import split_documents
 from backend.ingestion.metadata_enricher import enrich_metadata
-from backend.vectorestore.pinecone_store import add_documents_to_pinecone
+from backend.vectorstore.pinecone_store import add_documents_to_pinecone
 from logger import (Colors, log_error, log_header, log_info, log_success, log_warning)
 
 

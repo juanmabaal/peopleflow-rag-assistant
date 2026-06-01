@@ -15,7 +15,7 @@ def run_rag_pipeline(user_question: str) -> dict[str, Any]:
 
     retrieval_mode = retrieval_result["retrieval_mode"]
 
-    if retrieval_mode == "internal_rag":
+    if retrieval_mode in ["internal_rag", "hybrid_web_fallback"]:
         return generate_internal_answer(
             user_question=user_question,
             retrieval_result=retrieval_result,
@@ -29,15 +29,14 @@ def run_rag_pipeline(user_question: str) -> dict[str, Any]:
 
 def run_llm(query: str) -> dict[str, Any]:
     """
-    Backward-compatible wrapper for the Streamlit UI or old imports.
-    Internally, this now runs the PeopleFlow RAG pipeline.
+    Backward-compatible wrapper.
     """
     return run_rag_pipeline(query)
 
 
 if __name__ == "__main__":
     result = run_rag_pipeline(
-        "How can an employee request vacation days?"
+        "What is the best programming language for video games?"
     )
 
     print(result)

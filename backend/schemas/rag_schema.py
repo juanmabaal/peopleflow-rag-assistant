@@ -1,13 +1,18 @@
 from typing import Literal
 from pydantic import BaseModel, Field
 
+
 class ChunkRelated(BaseModel):
     chunk_id: str
     source_type: str
     source_name: str | None = None
+    provider: str | None = None
+    category: str | None = None
+    source_url: str | None = None
     page: float | int | None = None
     score: float
     content_preview: str
+
 
 class RAGResponse(BaseModel):
     user_question: str
