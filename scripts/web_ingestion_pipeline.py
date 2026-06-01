@@ -10,7 +10,7 @@ from logger import (
 from backend.ingestion.text_splitter import split_documents
 from backend.ingestion.web_loader import load_web_documents
 from backend.ingestion.web_metadata_enricher import enrich_web_metadata
-from backend.vectorestore.pinecone_store import add_documents_to_pinecone
+from backend.vectorstore.pinecone_store import add_documents_to_pinecone
 
 
 MIN_WEB_CHUNKS = 10
