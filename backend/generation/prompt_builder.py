@@ -17,6 +17,7 @@ source_name: {chunk.get("source_name")}
 provider: {chunk.get("provider")}
 category: {chunk.get("category")}
 source_url: {chunk.get("source_url")}
+document_version: {chunk.get("document_version")}
 page: {chunk.get("page")}
 score: {chunk.get("score")}
 
@@ -48,6 +49,8 @@ Important rules:
 - Keep the answer professional, concise, and helpful.
 - Return only valid JSON.
 - Do not include markdown outside the JSON.
+- The final answer must be useful for a customer support scenario.
+- Preserve traceability by keeping chunks_related aligned with the retrieved chunks.
 
 User question:
 {user_question}
@@ -69,6 +72,9 @@ Return the response using this exact JSON structure:
       "chunk_id": "...",
       "source_type": "...",
       "source_name": "...",
+      "provider": "...",
+      "category": "...",
+      "source_url": "...",
       "page": 0,
       "score": 0.0,
       "content_preview": "..."
