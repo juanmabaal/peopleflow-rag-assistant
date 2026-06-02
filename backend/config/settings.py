@@ -31,7 +31,8 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
 
 # Pinecone
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "peopleflow-hr-docs")
+PINECONE_INDEX_NAME_INTERNAL = os.getenv("PINECONE_INDEX_NAME_INTERNAL", "peopleflow-hr-docs")
+PINECONE_INDEX_NAME_WEB = os.getenv("PINECONE_INDEX_NAME_WEB", "peopleflow-hr-docs")
 
 # Tavily
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")

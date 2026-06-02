@@ -21,7 +21,7 @@ def get_chat_model():
         return ChatOpenAI(
             model=OPENAI_MODEL,
             api_key=OPENAI_API_KEY,
-            temperature=0.2,
+            temperature=None,
         )
 
     if LLM_PROVIDER == "xai":

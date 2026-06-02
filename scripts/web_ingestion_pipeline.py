@@ -1,3 +1,5 @@
+from langsmith import traceable
+
 from logger import (
     Colors,
     log_error,
@@ -7,6 +9,7 @@ from logger import (
     log_warning,
 )
 
+from backend.config.settings import PINECONE_INDEX_NAME_WEB
 from backend.ingestion.text_splitter import split_documents
 from backend.ingestion.web_loader import load_web_documents
 from backend.ingestion.web_metadata_enricher import enrich_web_metadata
@@ -36,6 +39,16 @@ def validate_created_chunks(chunks: list) -> None:
             "Consider increasing max_urls, max_depth, seed_urls, or adjusting keywords."
         )
 
+@traceable(
+    name="web_knowledge_ingestion_pipeline",
+    run_type="chain",
+    tags=["peopleflow", "ingestion", "web", "tavily", "pinecone"],
+    metadata={
+        "component": "web_ingestion_pipeline",
+        "target_index": PINECONE_INDEX_NAME_WEB,
+        "pipeline": "curated_web_knowledge_ingestion",
+    },
+)
 
 def main() -> None:
     try:
@@ -66,13 +79,15 @@ def main() -> None:
 
         log_info("Uploading web chunks to Pinecone...")
         add_documents_to_pinecone(
-            enriched_chunks,
+            documents=enriched_chunks,
+            index_name=PINECONE_INDEX_NAME_WEB,
             batch_size=WEB_PINECONE_BATCH_SIZE,
         )
 
         log_success("Web chunks uploaded to Pinecone successfully.")
 
         log_header("WEB KNOWLEDGE INGESTION COMPLETED")
+        log_info(f"{Colors.CYAN}Target index:{Colors.RESET} {PINECONE_INDEX_NAME_WEB}")
         log_info(f"{Colors.CYAN}Documents loaded:{Colors.RESET} {len(documents)}")
         log_info(f"{Colors.CYAN}Chunks indexed:{Colors.RESET} {len(enriched_chunks)}")
 
