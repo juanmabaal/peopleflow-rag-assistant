@@ -1,24 +1,25 @@
 from typing import Any
 
-from langchain_openai import OpenAIEmbeddings
-from langchain_pinecone import PineconeVectorStore
+from langsmith import traceable
 
-from backend.config.settings import EMBEDDING_MODEL, PINECONE_INDEX_NAME
+from backend.vectorstore.pinecone_store import get_internal_vector_store
 
-def get_internal_vectore_store() -> PineconeVectorStore:
-    embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
-
-    return PineconeVectorStore(
-        index_name=PINECONE_INDEX_NAME,
-        embedding=embeddings,
-    )
-
-
+@traceable(
+    name="retrieve_internal_peopleflow_context",
+    run_type="retriever",
+    tags=["peopleflow", "retrieval", "internal", "pinecone"],
+    metadata={
+        "component": "internal_retriever",
+        "source": "peopleflow_pdf",
+        "vectorstore": "pinecone",
+        "index_type": "internal_pdf",
+    },
+)
 def retrieve_internal_context(
         query:str,
         top_k: int=4,
 ) -> list[dict[str,Any]]:
-    vector_store = get_internal_vectore_store()
+    vector_store = get_internal_vector_store()
 
     results = vector_store.similarity_search_with_score(
     query=query,
@@ -41,7 +42,7 @@ def retrieve_internal_context(
                 "page": document.metadata.get("page"),
                 "score": float(score),
                 "content": document.page_content,
-                "content_preview": document.page_content[:300],
+                "content_preview": document.page_content[:600],
             }
         )
     

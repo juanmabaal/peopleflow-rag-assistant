@@ -2,7 +2,7 @@ from typing import Any
 
 from langsmith import traceable
 
-from backend.vectorstore.pinecone_store import get_pinecone_vector_store
+from backend.vectorstore.pinecone_store import get_web_vector_store
 
 
 WEB_SOURCE_TYPES = [
@@ -10,7 +10,7 @@ WEB_SOURCE_TYPES = [
     "web_hr_policy_reference",
 ]
 
-MIN_WEB_SCORE = 0.30
+MIN_WEB_SCORE = 0.50
 
 
 @traceable(
@@ -21,6 +21,7 @@ MIN_WEB_SCORE = 0.30
         "component": "web_retriever",
         "source": "curated_web",
         "vectorstore": "pinecone",
+        "index_type": "web_knowledge",
         "min_web_score": MIN_WEB_SCORE,
     },
 )
@@ -29,7 +30,7 @@ def retrieve_web_context(
     top_k: int = 4,
     min_score: float = MIN_WEB_SCORE,
 ) -> list[dict[str, Any]]:
-    vector_store = get_pinecone_vector_store()
+    vector_store = get_web_vector_store()
 
     results = vector_store.similarity_search_with_score(
         query=query,

@@ -10,7 +10,7 @@ from backend.generation.answer_generator import (
 def run_rag_pipeline(user_question: str) -> dict[str, Any]:
     retrieval_result = retrieve_hybrid_context(
         query=user_question,
-        top_k=4,
+        top_k=2,
     )
 
     retrieval_mode = retrieval_result["retrieval_mode"]

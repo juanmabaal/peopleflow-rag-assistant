@@ -6,7 +6,7 @@ from backend.retrieval.internal_retriever import retrieve_internal_context
 from backend.retrieval.web_retriever import retrieve_web_context
 
 
-MIN_INTERNAL_SCORE = 0.30
+MIN_INTERNAL_SCORE = 0.50
 
 
 def get_best_score(chunks: list[dict[str, Any]]) -> float:
@@ -48,7 +48,7 @@ def is_internal_context_sufficient(
 )
 def retrieve_hybrid_context(
     query: str,
-    top_k: int = 4,
+    top_k: int = 2,
 ) -> dict[str, Any]:
     """
     Hybrid retrieval strategy:
