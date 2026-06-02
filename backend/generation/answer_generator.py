@@ -1,11 +1,12 @@
 import json
 from typing import Any
 
+from langsmith import traceable
+
 from backend.generation.llm_factory import get_chat_model
 from backend.generation.prompt_builder import build_rag_prompt
 from backend.schemas.rag_schema import RAGResponse
 
-model = get_chat_model()
 
 def build_chunks_related(chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [
@@ -23,24 +24,36 @@ def build_chunks_related(chunks: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for chunk in chunks
     ]
 
-def generate_internal_answer(
-        user_question: str,
-        retrieval_result: dict[str, Any],
+
+@traceable(
+    name="generate_structured_rag_answer",
+    run_type="llm",
+    tags=["peopleflow", "generation", "structured_json"],
+    metadata={
+        "component": "answer_generator",
+        "output_format": "rag_json",
+    },
+)
+def generate_rag_answer(
+    user_question: str,
+    retrieval_result: dict[str, Any],
 ) -> dict[str, Any]:
     retrieval_mode = retrieval_result["retrieval_mode"]
     chunks = retrieval_result["chunks"]
 
     prompt = build_rag_prompt(
-        user_question= user_question,
+        user_question=user_question,
         chunks=chunks,
         retrieval_mode=retrieval_mode,
     )
 
+    model = get_chat_model()
     response = model.invoke(prompt)
     content = response.content
 
     try:
         parsed_response = json.loads(content)
+
     except json.JSONDecodeError:
         parsed_response = {
             "user_question": user_question,
@@ -48,25 +61,35 @@ def generate_internal_answer(
             "retrieval_mode": retrieval_mode,
             "chunks_related": build_chunks_related(chunks),
         }
-    
+
     parsed_response["chunks_related"] = build_chunks_related(chunks)
 
-    validate_response = RAGResponse.model_validate(parsed_response)
+    validated_response = RAGResponse.model_validate(parsed_response)
 
-    return validate_response.model_dump()
+    return validated_response.model_dump()
 
+
+@traceable(
+    name="generate_controlled_fallback_answer",
+    run_type="chain",
+    tags=["peopleflow", "generation", "fallback"],
+    metadata={
+        "component": "answer_generator",
+        "reason": "insufficient_internal_and_web_context",
+    },
+)
 def generate_fallback_required_answer(
-        user_question: str,
-        retrieval_result: dict[str, Any]
+    user_question: str,
+    retrieval_result: dict[str, Any],
 ) -> dict[str, Any]:
     chunks = retrieval_result["chunks"]
 
     response = {
         "user_question": user_question,
         "system_answer": (
-            "The internal PeopleFlow documentation does not contain enough relevant "
-            "information to answer this question with confidence. A web fallback search "
-            "is required to enrich the response."
+            "The available PeopleFlow internal documentation and curated external HR SaaS "
+            "references do not contain enough relevant context to answer this question with "
+            "confidence. Please contact a human support specialist or provide more details."
         ),
         "retrieval_mode": "web_fallback_required",
         "chunks_related": build_chunks_related(chunks),
@@ -75,3 +98,7 @@ def generate_fallback_required_answer(
     validated_response = RAGResponse.model_validate(response)
 
     return validated_response.model_dump()
+
+
+# Backward-compatible alias, in case another file still imports the old name.
+generate_internal_answer = generate_rag_answer
