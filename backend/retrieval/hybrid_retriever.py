@@ -48,7 +48,7 @@ def is_internal_context_sufficient(
 )
 def retrieve_hybrid_context(
     query: str,
-    top_k: int = 2,
+    top_k: int = 4,
 ) -> dict[str, Any]:
     """
     Hybrid retrieval strategy:
